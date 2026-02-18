@@ -1,0 +1,92 @@
+# This is a GitHub Actions workflow file.
+# It defines a set of automated jobs that run on GitHub's servers.
+
+name: CI Tests
+
+on:
+  # This section is the "trigger"
+
+  # Run this workflow when code is pushed to 'main' or 'dev'
+  push:
+    branches: [main, dev]
+
+  # ALSO run this workflow when a Pull Request is opened (or updated)
+  # that targets 'main' or 'dev'.
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  # --- Job 1: Run Unit Tests (Vitest) ---
+  unit-tests:
+    name: 'Run Unit Tests (Vitest)'
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out your repository's code
+      - uses: actions/checkout@v4
+
+      # Step 2: Set up the Node.js environment
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm' # Cache npm dependencies
+
+      # Step 3: Install all your project's dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Run your unit tests
+      # This maps to the "test": "vitest run" script in package.json
+      - name: Run Vitest
+        run: npm run test
+
+  # --- Job 2: Run End-to-End Tests (Playwright) ---
+  e2e-tests:
+    # This job runs in parallel with 'unit-tests'
+    name: 'Run E2E Tests (Playwright)'
+    timeout-minutes: 60
+    runs-on: ubuntu-latest # Run on a standard Linux virtual machine
+
+    steps:
+      # Step 1: Check out your repository's code
+      - uses: actions/checkout@v4
+
+      # Step 2: Set up the Node.js environment
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm' # Cache npm dependencies
+
+      # Step 3: Install all your project's dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Get Playwright version for cache key
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(npm list @playwright/test --depth=0 --json | jq -r '.dependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
+
+      # Step 5: Cache Playwright browsers
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+
+      # Step 6: Install the browsers needed by Playwright (only if not cached)
+      - name: Install Playwright Browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
+      # Step 7: Run your E2E tests
+      - name: Run Playwright tests
+        run: npm run test:e2e
+
+      # Step 8: Upload the test report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

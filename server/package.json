@@ -1,0 +1,26 @@
+{
+  "name": "project-horizon-server",
+  "version": "1.0.0",
+  "description": "WebSocket server for Project Horizon real-time trading dashboard",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "keywords": [
+    "websocket",
+    "trading",
+    "real-time",
+    "stock-market",
+    "indian-stocks"
+  ],
+  "author": "Utsab Kumar Agrawal",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.18.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

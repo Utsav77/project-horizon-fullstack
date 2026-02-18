@@ -1,0 +1,761 @@
+/* ==========================================================================
+   Project Horizon - Mobile Responsive Stylesheet
+   ========================================================================== */
+
+/* CSS Variables for Responsive Design
+   ========================================================================== */
+:root {
+  /* Breakpoints */
+  --bp-mobile: 640px;
+  --bp-tablet: 1024px;
+  --bp-desktop: 1280px;
+
+  /* Spacing (fluid) */
+  --space-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+  --space-sm: clamp(0.5rem, 1vw, 0.75rem);
+  --space-md: clamp(0.75rem, 1.5vw, 1rem);
+  --space-lg: clamp(1rem, 2vw, 1.5rem);
+  --space-xl: clamp(1.5rem, 3vw, 2rem);
+  --space-2xl: clamp(2rem, 4vw, 3rem);
+
+  /* Typography (fluid) */
+  --font-xs: clamp(0.75rem, 2vw, 0.875rem);
+  --font-sm: clamp(0.875rem, 2.5vw, 1rem);
+  --font-base: clamp(1rem, 3vw, 1.125rem);
+  --font-lg: clamp(1.125rem, 3.5vw, 1.25rem);
+  --font-xl: clamp(1.25rem, 4vw, 1.5rem);
+  --font-2xl: clamp(1.5rem, 5vw, 2rem);
+  --font-3xl: clamp(2rem, 6vw, 2.5rem);
+
+  /* Touch targets */
+  --touch-target-min: 44px;
+  --touch-target-comfortable: 48px;
+
+  /* Container widths */
+  --container-mobile: 100%;
+  --container-tablet: 90%;
+  --container-desktop: 1200px;
+
+  /* Grid columns */
+  --grid-cols-mobile: 1;
+  --grid-cols-tablet: 2;
+  --grid-cols-desktop: 3;
+}
+
+/* Base Responsive Resets
+     ========================================================================== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px; /* Base for rem units */
+  -webkit-text-size-adjust: 100%; /* Prevent iOS text size adjustment */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Container System
+     ========================================================================== */
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: var(--container-tablet);
+    padding: 0 var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: var(--container-desktop);
+    padding: 0 var(--space-xl);
+  }
+}
+
+/* Responsive Grid System
+     ========================================================================== */
+.grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(var(--grid-cols-mobile), 1fr);
+}
+
+@media (min-width: 640px) {
+  .grid {
+    gap: var(--space-lg);
+    grid-template-columns: repeat(var(--grid-cols-tablet), 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    gap: var(--space-xl);
+    grid-template-columns: repeat(var(--grid-cols-desktop), 1fr);
+  }
+}
+
+/* Utility classes for grid columns */
+.grid-cols-1 {
+  --grid-cols-mobile: 1;
+  --grid-cols-tablet: 1;
+  --grid-cols-desktop: 1;
+}
+.grid-cols-2 {
+  --grid-cols-mobile: 1;
+  --grid-cols-tablet: 2;
+  --grid-cols-desktop: 2;
+}
+.grid-cols-3 {
+  --grid-cols-mobile: 1;
+  --grid-cols-tablet: 2;
+  --grid-cols-desktop: 3;
+}
+.grid-cols-4 {
+  --grid-cols-mobile: 1;
+  --grid-cols-tablet: 2;
+  --grid-cols-desktop: 4;
+}
+
+/* Dashboard Layout
+     ========================================================================== */
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-layout {
+    flex-direction: row;
+  }
+}
+
+/* Sidebar Navigation
+     ========================================================================== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 280px;
+  height: 100vh;
+  background: var(--sidebar-bg, #1a1d29);
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
+}
+
+.sidebar.open ~ .sidebar-overlay {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    position: relative;
+    left: 0;
+    width: 260px;
+  }
+
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
+
+/* Mobile Header/Top Bar
+     ========================================================================== */
+.mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  background: var(--header-bg, #ffffff);
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+@media (min-width: 1024px) {
+  .mobile-header {
+    display: none;
+  }
+}
+
+/* Hamburger Menu Button
+     ========================================================================== */
+.hamburger-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: var(--touch-target-comfortable);
+  height: var(--touch-target-comfortable);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 12px;
+  z-index: 1001;
+}
+
+.hamburger-btn span {
+  width: 24px;
+  height: 2px;
+  background: var(--text-color, #374151);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+@media (min-width: 1024px) {
+  .hamburger-btn {
+    display: none;
+  }
+}
+
+/* Main Content Area
+     ========================================================================== */
+.main-content {
+  flex: 1;
+  padding: var(--space-md);
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .main-content {
+    padding: var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .main-content {
+    padding: var(--space-xl);
+  }
+}
+
+/* Card Components
+     ========================================================================== */
+.card {
+  background: var(--card-bg, #ffffff);
+  border-radius: 8px;
+  padding: var(--space-md);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 640px) {
+  .card {
+    padding: var(--space-lg);
+    border-radius: 12px;
+  }
+}
+
+.card-header {
+  font-size: var(--font-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+}
+
+.card-body {
+  font-size: var(--font-sm);
+}
+
+/* Stock Card (Holdings)
+     ========================================================================== */
+.stock-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+@media (min-width: 640px) {
+  .stock-card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.stock-info {
+  flex: 1;
+}
+
+.stock-symbol {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+
+.stock-price {
+  font-size: var(--font-base);
+  color: var(--text-secondary, #6b7280);
+}
+
+.stock-actions {
+  display: flex;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .stock-actions {
+    width: auto;
+  }
+}
+
+/* Trading Panel (Buy/Sell Forms)
+     ========================================================================== */
+.trading-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .trading-panel {
+    flex-direction: row;
+    gap: var(--space-lg);
+  }
+}
+
+.trade-form {
+  flex: 1;
+  padding: var(--space-md);
+  background: var(--form-bg, #f9fafb);
+  border-radius: 8px;
+}
+
+@media (min-width: 640px) {
+  .trade-form {
+    padding: var(--space-lg);
+  }
+}
+
+/* Form Elements (Touch-Friendly)
+     ========================================================================== */
+.form-group {
+  margin-bottom: var(--space-md);
+}
+
+.form-label {
+  display: block;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+  color: var(--text-color, #374151);
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: var(--font-base);
+  border: 1px solid var(--border-color, #d1d5db);
+  border-radius: 6px;
+  background: var(--input-bg, #ffffff);
+  min-height: var(--touch-target-comfortable);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--primary-color, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Buttons (Touch-Friendly)
+     ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  font-size: var(--font-base);
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: var(--touch-target-comfortable);
+  min-width: var(--touch-target-comfortable);
+  gap: var(--space-xs);
+}
+
+.btn-primary {
+  background: var(--primary-color, #3b82f6);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover, #2563eb);
+}
+
+.btn-secondary {
+  background: var(--secondary-color, #6b7280);
+  color: white;
+}
+
+.btn-success {
+  background: var(--success-color, #10b981);
+  color: white;
+}
+
+.btn-danger {
+  background: var(--danger-color, #ef4444);
+  color: white;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .btn {
+    padding: 10px 18px;
+  }
+
+  .btn-block {
+    width: auto;
+  }
+}
+
+/* Chart Container
+     ========================================================================== */
+.chart-container {
+  width: 100%;
+  height: 300px;
+  margin: var(--space-md) 0;
+}
+
+@media (min-width: 640px) {
+  .chart-container {
+    height: 400px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .chart-container {
+    height: 500px;
+  }
+}
+
+/* Stats Cards
+     ========================================================================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-card {
+  padding: var(--space-lg);
+  background: var(--card-bg, #ffffff);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+  font-size: var(--font-3xl);
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+
+.stat-label {
+  font-size: var(--font-sm);
+  color: var(--text-secondary, #6b7280);
+}
+
+/* Table Responsiveness
+     ========================================================================== */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-sm);
+}
+
+.table th,
+.table td {
+  padding: var(--space-sm);
+  text-align: left;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+@media (max-width: 640px) {
+  /* Stack table on mobile */
+  .table-responsive {
+    display: block;
+  }
+
+  .table-responsive thead {
+    display: none;
+  }
+
+  .table-responsive tbody,
+  .table-responsive tr,
+  .table-responsive td {
+    display: block;
+    width: 100%;
+  }
+
+  .table-responsive tr {
+    margin-bottom: var(--space-lg);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 8px;
+    padding: var(--space-md);
+  }
+
+  .table-responsive td {
+    border: none;
+    padding: var(--space-xs) 0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .table-responsive td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    margin-right: var(--space-md);
+  }
+}
+
+/* Modal (Mobile Optimized)
+     ========================================================================== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 2000;
+  padding: 0;
+}
+
+.modal-content {
+  background: var(--modal-bg, #ffffff);
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--space-lg);
+}
+
+@media (min-width: 640px) {
+  .modal {
+    align-items: center;
+    padding: var(--space-lg);
+  }
+
+  .modal-content {
+    border-radius: 12px;
+    width: auto;
+    min-width: 500px;
+    max-width: 90%;
+    max-height: 85vh;
+  }
+}
+
+/* Utility Classes
+     ========================================================================== */
+
+/* Display */
+.hide-mobile {
+  display: none;
+}
+@media (min-width: 640px) {
+  .hide-mobile {
+    display: block;
+  }
+}
+
+.hide-desktop {
+  display: block;
+}
+@media (min-width: 1024px) {
+  .hide-desktop {
+    display: none;
+  }
+}
+
+.show-mobile {
+  display: block;
+}
+@media (min-width: 640px) {
+  .show-mobile {
+    display: none;
+  }
+}
+
+/* Spacing */
+.mt-sm {
+  margin-top: var(--space-sm);
+}
+.mt-md {
+  margin-top: var(--space-md);
+}
+.mt-lg {
+  margin-top: var(--space-lg);
+}
+.mb-sm {
+  margin-bottom: var(--space-sm);
+}
+.mb-md {
+  margin-bottom: var(--space-md);
+}
+.mb-lg {
+  margin-bottom: var(--space-lg);
+}
+.p-sm {
+  padding: var(--space-sm);
+}
+.p-md {
+  padding: var(--space-md);
+}
+.p-lg {
+  padding: var(--space-lg);
+}
+
+/* Text alignment */
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .text-center-mobile {
+    text-align: center;
+  }
+}
+
+/* Flexbox utilities */
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-center {
+  justify-content: center;
+}
+.items-center {
+  align-items: center;
+}
+.gap-sm {
+  gap: var(--space-sm);
+}
+.gap-md {
+  gap: var(--space-md);
+}
+.gap-lg {
+  gap: var(--space-lg);
+}
+
+/* Accessibility - Focus Visible
+     ========================================================================== */
+*:focus-visible {
+  outline: 2px solid var(--primary-color, #3b82f6);
+  outline-offset: 2px;
+}
+
+/* Safe Area Insets (for iOS notch)
+     ========================================================================== */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom));
+  }
+
+  .safe-area-top {
+    padding-top: calc(var(--space-md) + env(safe-area-inset-top));
+  }
+}
+
+/* Print Styles
+     ========================================================================== */
+@media print {
+  .no-print,
+  .hamburger-btn,
+  .sidebar,
+  .mobile-header {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+  }
+
+  .card {
+    page-break-inside: avoid;
+  }
+}

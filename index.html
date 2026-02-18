@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ============================================
+       CONTENT SECURITY POLICY (CSP)
+       ============================================
+       
+       Purpose: Prevents XSS (Cross-Site Scripting) attacks by controlling
+       what resources the browser is allowed to load.
+       
+       Interview Point: "I implemented CSP headers to prevent XSS attacks,
+       which is critical for a financial/trading application handling
+       sensitive user data."
+  -->
+    <!-- 
+    NOTE: frame-ancestors is NOT included here because it only works
+    via HTTP headers, not meta tags. We'll add it in the server config.
+    See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
+  -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com;
+      style-src 'self' 'unsafe-inline';
+      connect-src 'self' ws://localhost:8080 wss://project-horizon-ws.onrender.com https://project-horizon-ws.onrender.com;
+      img-src 'self' data: https:;
+      font-src 'self' data:;
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self';
+      upgrade-insecure-requests;
+      block-all-mixed-content;
+    "
+    />
+
+    <!-- ============================================
+       SEO & METADATA
+       ============================================ -->
+    <meta
+      name="description"
+      content="Project Horizon - A production-grade real-time trading dashboard built with Vue 3"
+    />
+    <meta name="author" content="Your Name" />
+    <meta name="keywords" content="trading, dashboard, vue3, real-time, stock market" />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Project Horizon - Trading Dashboard" />
+    <meta property="og:description" content="Production-grade real-time trading dashboard" />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Theme Color (for mobile browsers) -->
+    <meta name="theme-color" content="#0f172a" />
+
+    <!-- ============================================
+       PRECONNECT FOR PERFORMANCE
+       ============================================
+       
+       Purpose: Establish early connections to external domains
+       to reduce latency when loading resources
+  -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+
+    <title>Project Horizon - Trading Dashboard</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+
+    <!-- ============================================
+       NOSCRIPT FALLBACK
+       ============================================
+       
+       Purpose: Inform users who have JavaScript disabled
+  -->
+    <noscript>
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          font-family:
+            system-ui,
+            -apple-system,
+            sans-serif;
+          text-align: center;
+          padding: 2rem;
+          background: #0f172a;
+          color: #f1f5f9;
+        "
+      >
+        <div>
+          <h1>JavaScript Required</h1>
+          <p>
+            Project Horizon requires JavaScript to function properly.
+            <br />
+            Please enable JavaScript in your browser settings.
+          </p>
+        </div>
+      </div>
+    </noscript>
+  </body>
+</html>
